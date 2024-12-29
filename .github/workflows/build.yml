@@ -15,36 +15,58 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ { name: Windows, ver: windows-latest } ]
+        os: [
+            { name: Windows, ver: windows-2022, runtime: win-x64 },
+            { name: Ubuntu-x64, ver: ubuntu-22.04, runtime: linux-x64 },
+            { name: Ubuntu-arm, ver: ubuntu-22.04-arm, runtime: linux-arm64 },
+            { name: macOS-x64, ver: macos-13, runtime: osx-x64 },
+            { name: macOS-arm, ver: macos-14, runtime: osx-arm64 }
+          ]
         frameworks: [
-           { name: ".NET Framework 4.6.2", common: "net462", win: "net462", coverage: "" },
-           { name: ".NET 6.0", common: "net6.0", win: "net6.0-windows", coverage: '' },
-           { name: ".NET 8.0", common: "net8.0", win: "net8.0-windows", coverage: '--collect:"XPlat Code Coverage" --settings coverlet.runsettings' }
-        ]
+            { name: ".NET 6.0", common: "net6.0", win: "net6.0-windows", coverage: '' },
+            { name: ".NET 8.0", common: "net8.0", win: "net8.0-windows", coverage: '--collect:"XPlat Code Coverage" --settings coverlet.runsettings' }
+          ]
+        include:
+          - frameworks: { name: ".NET Framework 4.6.2", common: "net462", win: "net462", coverage: "" }
+            os: { name: Windows, ver: windows-2022, runtime: win-x64 }
+        exclude:
+          # .NET 6 not available for macOS per default
+          - frameworks: { name: ".NET 6.0", common: "net6.0", win: "net6.0-windows", coverage: '' }
+            os: { name: macOS-x64, ver: macos-13, runtime: osx-x64 }
+          - frameworks: { name: ".NET 6.0", common: "net6.0", win: "net6.0-windows", coverage: '' }
+            os: { name: macOS-arm, ver: macos-14, runtime: osx-arm64 }
+
     name: ${{ matrix.os.name }} (${{ matrix.frameworks.name }})
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
     steps:
     - uses: actions/checkout@v4
     - name: Test FO-DICOM.Tests
-      run: dotnet test ./Tests/FO-DICOM.Tests/FO-DICOM.Tests.csproj --configuration Release --framework ${{ matrix.frameworks.common }} --blame --runtime win-x64 --logger:"trx;LogFileName=.\results${{ matrix.frameworks.common }}.xml" ${{ matrix.frameworks.coverage }}
+      run: dotnet test ./Tests/FO-DICOM.Tests/FO-DICOM.Tests.csproj --configuration Release --framework ${{ matrix.frameworks.common }} --blame --runtime ${{ matrix.os.runtime }} --logger:"trx;LogFileName=.\results-${{ matrix.os.name }}-${{ matrix.frameworks.common }}.xml" ${{ matrix.frameworks.coverage }}
     - name: Upload test results
+      if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
-          name: test-v5-${{ matrix.frameworks.common }}.xml
-          path: ./Tests/FO-DICOM.Tests/TestResults/results${{ matrix.frameworks.common }}.xml
+          name: test-v5-${{ matrix.os.name }}-${{ matrix.frameworks.common }}.xml
+          path: ./Tests/FO-DICOM.Tests/TestResults/results-${{ matrix.os.name }}-${{ matrix.frameworks.common }}.xml
     - name: Test FO-DICOM.Tests.Windows
+      if: matrix.os.name == 'Windows'
       run: dotnet test ./Tests/FO-DICOM.Tests.Windows/FO-DICOM.Tests.Windows.csproj --configuration Release --framework ${{ matrix.frameworks.win }} --blame --runtime win-x64 --logger:"trx;LogFileName=.\results-win-${{ matrix.frameworks.common }}.xml" ${{ matrix.frameworks.coverage }}
     - name: Upload test results
+      if: matrix.os.name == 'Windows'
       uses: actions/upload-artifact@v4
       with:
-          name: test-v5-${{ matrix.frameworks.win }}.xml
-          path: ./Tests/FO-DICOM.Tests/TestResults/results-win-${{ matrix.frameworks.common }}.xml
+          name: test-v5-win-${{ matrix.frameworks.win }}.xml
+          path: ./Tests/FO-DICOM.Tests.Windows/TestResults/results-win-${{ matrix.frameworks.common }}.xml
     - name: Upload code coverage
       if: matrix.frameworks.coverage != ''
       uses: codecov/codecov-action@v5
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-  
+
   benchmarks:
     runs-on: windows-2022
     steps:
