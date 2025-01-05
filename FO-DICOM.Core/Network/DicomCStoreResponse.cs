@@ -45,6 +45,7 @@ namespace FellowOakDicom.Network
                 }
                 else
                 {
+                    using var unvalidatedCommand = new UnvalidatedScope(Command);
                     Command.AddOrUpdate(DicomTag.AffectedSOPInstanceUID, value);
                 }
             }
