@@ -1438,6 +1438,7 @@ namespace FellowOakDicom
             if (vr == DicomVR.SQ)
             {
                 if (values == null) return DoAdd(new DicomSequence(tag), allowUpdate);
+                if (typeof(T) == typeof(DicomSequence) && values.Count == 1) return DoAdd(new DicomSequence(tag, (values[0] as DicomSequence).Items.ToArray()), allowUpdate);
                 if (typeof(T) == typeof(DicomContentItem)) return DoAdd(new DicomSequence(tag, values.Cast<DicomContentItem>().Select(x => x.Dataset).ToArray()), allowUpdate);
                 if (typeof(T) == typeof(DicomDataset) || typeof(T) == typeof(DicomCodeItem)
                     || typeof(T) == typeof(DicomMeasuredValue) || typeof(T) == typeof(DicomReferencedSOP)) return DoAdd(new DicomSequence(tag, values.Cast<DicomDataset>().ToArray()), allowUpdate);
