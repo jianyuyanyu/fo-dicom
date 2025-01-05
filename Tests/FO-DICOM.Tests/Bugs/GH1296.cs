@@ -10,7 +10,7 @@ namespace FellowOakDicom.Tests.Bugs
     {
 
         [Fact]
-        public void OpenFileWithGermanNumbers()
+        public void OpenFileWithDSNumbersEncodedInCulture()
         {
             // Arrange
             var inputFile = DicomFile.Open(TestData.Resolve("GH1296.dcm"));

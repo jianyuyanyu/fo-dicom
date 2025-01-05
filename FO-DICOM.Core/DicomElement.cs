@@ -873,7 +873,7 @@ namespace FellowOakDicom
             {
                 _values =
                     base.Get<string[]>()
-                        // #1296 some invalid file shave the german "," as decimal separator. because a comma is no valid character in DS, this cannot be misinterpretated and it is obvious to replace it by "."
+                        // #1296 some invalid files have "," as decimal separator. because a comma is no valid character in DS, this cannot be misinterpretated and it is obvious to replace it by "."
                         .Select(x => decimal.Parse(x.Replace(',','.'), NumberStyles.Any, CultureInfo.InvariantCulture))
                         .ToArray();
             }
