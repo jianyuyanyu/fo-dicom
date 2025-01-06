@@ -44,5 +44,20 @@ namespace FellowOakDicom.Tests
 
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void AddDatetimeWithFraction()
+        {
+            var datetimeWithFraction = new DateTime(2007, 6, 28, 15, 19, 45, 406, DateTimeKind.Unspecified);
+            var dataset = new DicomDataset
+            {
+                { DicomTag.AcquisitionDateTime, datetimeWithFraction }
+            };
+            var actualDate = dataset.GetSingleValue<DateTime>(DicomTag.AcquisitionDateTime);
+            var actualDateString = dataset.GetString(DicomTag.AcquisitionDateTime);
+
+            Assert.Equal(datetimeWithFraction, actualDate);
+            Assert.Equal("20070628151945.406", actualDateString);
+        }
     }
 }
