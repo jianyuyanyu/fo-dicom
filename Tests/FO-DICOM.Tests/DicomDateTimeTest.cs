@@ -45,19 +45,33 @@ namespace FellowOakDicom.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void AddDatetimeWithFraction()
+
+        public static TheoryData<DicomTag, DateTime, string> Datetimes = new TheoryData<DicomTag, DateTime, string> 
+        { 
+            // with Fraction
+            { DicomTag.AcquisitionDateTime, new DateTime(2007, 6, 28, 15, 19, 45, 406, DateTimeKind.Unspecified), "20070628151945.406" },
+            { DicomTag.AcquisitionDateTime, new DateTime(2007, 6, 28, 15, 19, 45, 400, DateTimeKind.Unspecified), "20070628151945.4" },
+            { DicomTag.StudyTime, new DateTime(2007, 6, 28, 15, 19, 45, 406, DateTimeKind.Unspecified), "151945.406" },
+            { DicomTag.StudyTime, new DateTime(2007, 6, 28, 15, 19, 45, 400, DateTimeKind.Unspecified), "151945.4" },
+            // without Fraction
+            { DicomTag.AcquisitionDateTime, new DateTime(2007, 6, 28, 15, 19, 45, DateTimeKind.Unspecified), "20070628151945" },
+            { DicomTag.AcquisitionDateTime, new DateTime(2007, 6, 28, 15, 0, 0, DateTimeKind.Unspecified), "20070628150000" },
+            { DicomTag.StudyTime, new DateTime(2007, 6, 28, 15, 19, 45, DateTimeKind.Unspecified), "151945" },
+            { DicomTag.StudyTime, new DateTime(2007, 6, 28, 15, 0, 0, DateTimeKind.Unspecified), "150000" }
+        };
+
+        [Theory]
+        [MemberData(nameof(Datetimes))]
+        public void AddDatetimeWithOrWithoutFraction(DicomTag tag, DateTime date, string expectedString)
         {
-            var datetimeWithFraction = new DateTime(2007, 6, 28, 15, 19, 45, 406, DateTimeKind.Unspecified);
             var dataset = new DicomDataset
             {
-                { DicomTag.AcquisitionDateTime, datetimeWithFraction }
+                { tag, date }
             };
-            var actualDate = dataset.GetSingleValue<DateTime>(DicomTag.AcquisitionDateTime);
-            var actualDateString = dataset.GetString(DicomTag.AcquisitionDateTime);
+            var actualDateString = dataset.GetString(tag);
 
-            Assert.Equal(datetimeWithFraction, actualDate);
-            Assert.Equal("20070628151945.406", actualDateString);
+            Assert.Equal(expectedString, actualDateString);
         }
+
     }
 }
