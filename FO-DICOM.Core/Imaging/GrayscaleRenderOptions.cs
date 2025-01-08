@@ -120,7 +120,7 @@ namespace FellowOakDicom.Imaging
         /// Window Center
         /// </summary>
         /// <param name="dataset">Dataset to extract <see cref="GrayscaleRenderOptions"/> from</param>
-        /// <param name="frame">The 0-based framenumber for which the grayscale options should be extracted.</param>
+        /// <param name="frame">The 0-based framenumber for which the grayscale options should be extracted. Take 0 in case of single-framed image.</param>
         /// <returns>New grayscale render options instance</returns>
         public static GrayscaleRenderOptions FromDataset(DicomDataset dataset, int frame)
         {
@@ -180,6 +180,7 @@ namespace FellowOakDicom.Imaging
         /// Create grayscale render options based on window level data.
         /// </summary>
         /// <param name="dataset">DICOM dataset from which render options should be obtained.</param>
+        /// <param name="frame">0-based Frame number. Take 0 in case of single-framed image.</param>
         /// <returns>Grayscale render options based on window level data.</returns>
         public static GrayscaleRenderOptions FromWindowLevel(DicomDataset dataset, int frame = 0)
         {
@@ -236,7 +237,7 @@ namespace FellowOakDicom.Imaging
         /// Create grayscale render options based on window level data stored in functional groups in enhanced multiframe images
         /// </summary>
         /// <param name="dataset">DICOM dataset from which render options should be obtained.</param>
-        /// <param name="frame">0-based Frame number</param>
+        /// <param name="frame">0-based Frame number. Take 0 in case of single-framed image.</param>
         /// <returns>Grayscale render options based on window level data.</returns>
         public static GrayscaleRenderOptions FromFunctionalWindowLevel(DicomDataset dataset, int frame)
         {

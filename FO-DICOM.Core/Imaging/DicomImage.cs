@@ -43,9 +43,7 @@ namespace FellowOakDicom.Imaging
 
         /// <summary>Creates DICOM image object from dataset</summary>
         /// <param name="dataset">Source dataset</param>
-        /// <param name="frame">Zero indexed frame number. If <paramref name="frame"/> is set to a negative number, the
-        /// <see cref="DicomImage"/> object will remain in a partly initialized state, allowing for <see cref="WindowCenter"/>,
-        /// <see cref="WindowWidth"/> and <see cref="GrayscaleColorMap"/> to be configured prior to rendering the image frames.</param>
+        /// <param name="frame">Zero indexed frame number.</param>
         public DicomImage(DicomDataset dataset, int frame = 0)
         {
             ShowOverlays = true;
