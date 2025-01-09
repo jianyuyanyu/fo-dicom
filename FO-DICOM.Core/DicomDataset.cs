@@ -786,9 +786,9 @@ namespace FellowOakDicom
 
 
         /// <summary>
-        /// Returns a DicomDataset, that contains all Tags accumulated from the SharedFunctionalGroup and the PerFrameFunctionalGroup
+        /// Returns a DicomDataset, that contains all Tags accumulated from the Shared Functional Group Sequence and the Per-Frame Functional Group Sequence.
         /// </summary>
-        /// <param name="frame">the 0-based frame index</param>
+        /// <param name="frame">Zero-based frame index.</param>
         /// <returns></returns>
         /// <exception cref="DicomDataException"></exception>
         public DicomDataset FunctionalGroupValues(int frame)

@@ -43,7 +43,7 @@ namespace FellowOakDicom.Imaging
 
         /// <summary>Creates DICOM image object from dataset</summary>
         /// <param name="dataset">Source dataset</param>
-        /// <param name="frame">Zero indexed frame number.</param>
+        /// <param name="frame">Zero-based frame index.</param>
         public DicomImage(DicomDataset dataset, int frame = 0)
         {
             ShowOverlays = true;
@@ -78,7 +78,7 @@ namespace FellowOakDicom.Imaging
 
         /// <summary>Creates DICOM image object from file</summary>
         /// <param name="fileName">Source file</param>
-        /// <param name="frame">Zero indexed frame number</param>
+        /// <param name="frame">Zero-based frame index.</param>
         public DicomImage(string fileName, int frame = 0)
             : this(DicomFile.Open(fileName).Dataset, frame)
         {
@@ -251,7 +251,7 @@ namespace FellowOakDicom.Imaging
         #region METHODS
 
         /// <summary>Renders DICOM image to <see cref="IImage"/>.</summary>
-        /// <param name="frame">Zero indexed frame number.</param>
+        /// <param name="frame">Zero-based frame index.</param>
         /// <returns>Rendered image</returns>
         public virtual IImage RenderImage(int frame = 0)
         {
