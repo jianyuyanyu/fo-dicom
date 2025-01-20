@@ -292,7 +292,7 @@ namespace FellowOakDicom.Tests.Network.Client
             var actual = 0;
 
             var requests = Enumerable.Range(0, expected).Select(
-                async requestIndex =>
+                requestIndex => Task.Run(async () =>
                 {
                     var client = CreateClient("127.0.0.1", port, false, "SCU", "ANY-SCP");
                     client.Logger = _logger.IncludePrefix($"{nameof(DicomClient)} #{requestIndex}");
@@ -304,12 +304,12 @@ namespace FellowOakDicom.Tests.Network.Client
                                 _testOutputHelper.WriteLine("Response #{0}", requestIndex);
                                 Interlocked.Increment(ref actual);
                             }
-                        });
+                        }).ConfigureAwait(false);
 
                     _testOutputHelper.WriteLine("Sending #{0}", requestIndex);
-                    await client.SendAsync();
+                    await client.SendAsync().ConfigureAwait(false);
                     _testOutputHelper.WriteLine("Sent (or timed out) #{0}", requestIndex);
-                }).ToList();
+                })).ToList();
             await Task.WhenAll(requests);
 
             Assert.Equal(expected, actual);
