@@ -3,6 +3,7 @@
 - **Breaking change**: IByteSource interface has changed
 - VOI LUT Function with empty value causes a crash (#1891)
 - DicomElement.ValueRepresentation.ValidateString() now throws a DicomValidationException if a null value is passed (#1590)
+- Handle invalid DICOM files, that contain "," as decimal separator in DS values (#1296)
 
 ### 5.1.5 (2024-11-25)
 
