@@ -2,6 +2,7 @@
 - refactor the parser to make it better maintainable
 - **Breaking change**: IByteSource interface has changed
 - VOI LUT Function with empty value causes a crash (#1891)
+- Fixed bug, where milliseconds have been cut away when adding a Datetime to a DicomDataset (#1719)
 - DicomElement.ValueRepresentation.ValidateString() now throws a DicomValidationException if a null value is passed (#1590)
 - The optional AffectedSopInstanceUID is added to the CStoreResponse by default. (#1390)
 - Handle invalid DICOM files, that contain "," as decimal separator in DS values (#1296)
