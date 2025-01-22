@@ -686,8 +686,8 @@ namespace FellowOakDicom.Tests.Network.Client
             }
             stopWatch.Stop();
             
-            // the timeout was configured with 1 second, so assert that the method should at least wait this 1 second tieout, but returned after no longer than 2 seconds
-            Assert.InRange(stopWatch.Elapsed.Milliseconds, 900, 2000);
+            // the timeout was configured with 1 second, so assert that the method should at least wait this 1 second timeout, but returned after no longer than 2 seconds
+            Assert.InRange(stopWatch.Elapsed.TotalMilliseconds, 900, 2000);
             Assert.True(timedOut);
         }
 
