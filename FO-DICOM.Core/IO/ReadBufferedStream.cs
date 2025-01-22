@@ -34,6 +34,7 @@ namespace FellowOakDicom.IO
         private byte[] _seekBackBuffer;
         private byte[] _seekCurrentBuffer;
         private readonly int _seekBackBufferSize;
+        bool hasReadedEnd = false;
 
         private readonly Stream _underlyingStream;
 
@@ -92,15 +93,19 @@ namespace FellowOakDicom.IO
 
         private void ReadNextBlock()
         {
-            if (_underlyingPosition >= _underlyingStream.Length)
+            if (hasReadedEnd)
             {
                 // already at the end, so do nothing
                 return;
             }
             (_seekCurrentBuffer, _seekBackBuffer) = (_seekBackBuffer, _seekCurrentBuffer);
-            _ = _underlyingStream.Read(_seekCurrentBuffer, 0, _seekBackBufferSize);
-            _underlyingLastReadPosition = _underlyingStream.Position;
+            var bytesRead = _underlyingStream.Read(_seekCurrentBuffer, 0, _seekBackBufferSize);
+            _underlyingLastReadPosition+= bytesRead;
             _underlyingPosition += _seekBackBufferSize;
+            if (bytesRead <  _seekBackBufferSize)
+            {
+                hasReadedEnd = true;
+            }
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -164,7 +169,7 @@ namespace FellowOakDicom.IO
 
         public override bool CanWrite => false;
 
-        public override long Length => _underlyingStream.Length;
+        public override long Length => hasReadedEnd ? _underlyingLastReadPosition : long.MaxValue;
 
         public override void SetLength(long value) => _underlyingStream.SetLength(value);
 
