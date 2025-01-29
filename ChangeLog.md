@@ -8,6 +8,7 @@
 - The optional AffectedSopInstanceUID is added to the CStoreResponse by default. (#1390)
 - Handle invalid DICOM files, that contain "," as decimal separator in DS values (#1296)
 - DicomDataset.AddOrUpdate also allows passing DicomSequence as argument type (#1664)
+- Fix parsing files from stream created by HttpClient (#1698)
 
 ### 5.1.5 (2024-11-25)
 
