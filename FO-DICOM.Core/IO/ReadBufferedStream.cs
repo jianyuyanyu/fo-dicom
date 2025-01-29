@@ -34,7 +34,7 @@ namespace FellowOakDicom.IO
         private byte[] _seekBackBuffer;
         private byte[] _seekCurrentBuffer;
         private readonly int _seekBackBufferSize;
-        bool hasReadedEnd = false;
+        private bool _hasReachedEnd = false;
 
         private readonly Stream _underlyingStream;
 
@@ -93,18 +93,26 @@ namespace FellowOakDicom.IO
 
         private void ReadNextBlock()
         {
-            if (hasReadedEnd)
+            if (_hasReachedEnd)
             {
                 // already at the end, so do nothing
                 return;
             }
             (_seekCurrentBuffer, _seekBackBuffer) = (_seekBackBuffer, _seekCurrentBuffer);
-            var bytesRead = _underlyingStream.Read(_seekCurrentBuffer, 0, _seekBackBufferSize);
-            _underlyingLastReadPosition+= bytesRead;
-            _underlyingPosition += _seekBackBufferSize;
-            if (bytesRead <  _seekBackBufferSize)
+
+            int sumBytesRead = 0;
+            int bytesRead = 0;
+            do
             {
-                hasReadedEnd = true;
+                bytesRead = _underlyingStream.Read(_seekCurrentBuffer, sumBytesRead, _seekBackBufferSize - sumBytesRead);
+                sumBytesRead += bytesRead;
+            } while (bytesRead > 0 && sumBytesRead < _seekBackBufferSize);
+
+            _underlyingLastReadPosition += sumBytesRead;
+            _underlyingPosition += _seekBackBufferSize;
+            if (sumBytesRead < _seekBackBufferSize)
+            {
+                _hasReachedEnd = true;
             }
         }
 
@@ -161,7 +169,10 @@ namespace FellowOakDicom.IO
         protected override void Dispose(bool disposing)
         {
             if (disposing)
+            {
                 _underlyingStream.Close();
+            }
+
             base.Dispose(disposing);
         }
 
@@ -169,7 +180,7 @@ namespace FellowOakDicom.IO
 
         public override bool CanWrite => false;
 
-        public override long Length => hasReadedEnd ? _underlyingLastReadPosition : long.MaxValue;
+        public override long Length => _hasReachedEnd ? _underlyingLastReadPosition : long.MaxValue;
 
         public override void SetLength(long value) => _underlyingStream.SetLength(value);
 
