@@ -1,8 +1,7 @@
-﻿// Copyright (c) 2012-2023 fo-dicom contributors.
+﻿// Copyright (c) 2012-2025 fo-dicom contributors.
 // Licensed under the Microsoft Public License (MS-PL).
 #nullable disable
 
-using FellowOakDicom.Log;
 using FellowOakDicom.Network.Client.Advanced.Connection;
 using FellowOakDicom.Network.Tls;
 using Microsoft.Extensions.DependencyInjection;
