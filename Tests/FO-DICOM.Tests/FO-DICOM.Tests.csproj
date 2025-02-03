@@ -97,6 +97,9 @@
     <None Update="Test Data\DICOMDIR">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Test Data\DICOMDIR_GH1927">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Test Data\DIRW0007">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
