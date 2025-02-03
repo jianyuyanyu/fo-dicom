@@ -34,6 +34,7 @@ namespace FellowOakDicom.IO
         private byte[] _seekBackBuffer;
         private byte[] _seekCurrentBuffer;
         private readonly int _seekBackBufferSize;
+        private bool _hasReachedEnd = false;
 
         private readonly Stream _underlyingStream;
 
@@ -92,15 +93,27 @@ namespace FellowOakDicom.IO
 
         private void ReadNextBlock()
         {
-            if (_underlyingPosition >= _underlyingStream.Length)
+            if (_hasReachedEnd)
             {
                 // already at the end, so do nothing
                 return;
             }
             (_seekCurrentBuffer, _seekBackBuffer) = (_seekBackBuffer, _seekCurrentBuffer);
-            _ = _underlyingStream.Read(_seekCurrentBuffer, 0, _seekBackBufferSize);
-            _underlyingLastReadPosition = _underlyingStream.Position;
+
+            int sumBytesRead = 0;
+            int bytesRead = 0;
+            do
+            {
+                bytesRead = _underlyingStream.Read(_seekCurrentBuffer, sumBytesRead, _seekBackBufferSize - sumBytesRead);
+                sumBytesRead += bytesRead;
+            } while (bytesRead > 0 && sumBytesRead < _seekBackBufferSize);
+
+            _underlyingLastReadPosition += sumBytesRead;
             _underlyingPosition += _seekBackBufferSize;
+            if (sumBytesRead < _seekBackBufferSize)
+            {
+                _hasReachedEnd = true;
+            }
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -156,7 +169,10 @@ namespace FellowOakDicom.IO
         protected override void Dispose(bool disposing)
         {
             if (disposing)
+            {
                 _underlyingStream.Close();
+            }
+
             base.Dispose(disposing);
         }
 
@@ -164,7 +180,7 @@ namespace FellowOakDicom.IO
 
         public override bool CanWrite => false;
 
-        public override long Length => _underlyingStream.Length;
+        public override long Length => _hasReachedEnd ? _underlyingLastReadPosition : long.MaxValue;
 
         public override void SetLength(long value) => _underlyingStream.SetLength(value);
 
