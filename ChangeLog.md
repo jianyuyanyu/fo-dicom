@@ -10,6 +10,7 @@
 - DicomDataset.AddOrUpdate also allows passing DicomSequence as argument type (#1664)
 - Enable reading DICOMDIR files where the offsets are not correctly but at cleast close (#1927)
 - Fix parsing files from stream created by HttpClient (#1698)
+- update to DICOM Standard 2024e
 
 ### 5.1.5 (2024-11-25)
 

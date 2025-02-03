@@ -818,6 +818,9 @@ namespace FellowOakDicom
         ///<summary>(0008,114C) VR=SQ VM=1 Referenced Segmentation Sequence</summary>
         public readonly static DicomTag ReferencedSegmentationSequence = new DicomTag(0x0008, 0x114C);
 
+        ///<summary>(0008,114D) VR=SQ VM=1 Referenced Surface Segmentation Sequence</summary>
+        public readonly static DicomTag ReferencedSurfaceSegmentationSequence = new DicomTag(0x0008, 0x114D);
+
         ///<summary>(0008,1150) VR=UI VM=1 Referenced SOP Class UID</summary>
         public readonly static DicomTag ReferencedSOPClassUID = new DicomTag(0x0008, 0x1150);
 
@@ -6143,6 +6146,9 @@ namespace FellowOakDicom
         ///<summary>(0022,1622) VR=CS VM=1 Ophthalmic Volumetric Properties Flag</summary>
         public readonly static DicomTag OphthalmicVolumetricPropertiesFlag = new DicomTag(0x0022, 0x1622);
 
+        ///<summary>(0022,1623) VR=FL VM=1 Ophthalmic Anatomic Reference Point Frame Coordinate</summary>
+        public readonly static DicomTag OphthalmicAnatomicReferencePointFrameCoordinate = new DicomTag(0x0022, 0x1623);
+
         ///<summary>(0022,1624) VR=FL VM=1 Ophthalmic Anatomic Reference Point X-Coordinate</summary>
         public readonly static DicomTag OphthalmicAnatomicReferencePointXCoordinate = new DicomTag(0x0022, 0x1624);
 
@@ -6160,6 +6166,15 @@ namespace FellowOakDicom
 
         ///<summary>(0022,1630) VR=DS VM=1 Quality Threshold</summary>
         public readonly static DicomTag QualityThreshold = new DicomTag(0x0022, 0x1630);
+
+        ///<summary>(0022,1632) VR=SQ VM=1 Ophthalmic Anatomic Reference Point Sequence</summary>
+        public readonly static DicomTag OphthalmicAnatomicReferencePointSequence = new DicomTag(0x0022, 0x1632);
+
+        ///<summary>(0022,1633) VR=CS VM=1 Ophthalmic Anatomic Reference Point Localization Type</summary>
+        public readonly static DicomTag OphthalmicAnatomicReferencePointLocalizationType = new DicomTag(0x0022, 0x1633);
+
+        ///<summary>(0022,1634) VR=IS VM=1 Primary Anatomic Structure Item Index</summary>
+        public readonly static DicomTag PrimaryAnatomicStructureItemIndex = new DicomTag(0x0022, 0x1634);
 
         ///<summary>(0022,1640) VR=SQ VM=1 OCT B-scan Analysis Acquisition Parameters Sequence</summary>
         public readonly static DicomTag OCTBscanAnalysisAcquisitionParametersSequence = new DicomTag(0x0022, 0x1640);
@@ -12200,11 +12215,14 @@ namespace FellowOakDicom
         ///<summary>(3004,0010) VR=SQ VM=1 RT Dose ROI Sequence (RETIRED)</summary>
         public readonly static DicomTag RTDoseROISequenceRETIRED = new DicomTag(0x3004, 0x0010);
 
-        ///<summary>(3004,0012) VR=DS VM=1 Dose Value (RETIRED)</summary>
-        public readonly static DicomTag DoseValueRETIRED = new DicomTag(0x3004, 0x0012);
+        ///<summary>(3004,0012) VR=DS VM=1 Dose Value</summary>
+        public readonly static DicomTag DoseValue = new DicomTag(0x3004, 0x0012);
 
         ///<summary>(3004,0014) VR=CS VM=1-3 Tissue Heterogeneity Correction</summary>
         public readonly static DicomTag TissueHeterogeneityCorrection = new DicomTag(0x3004, 0x0014);
+
+        ///<summary>(3004,0016) VR=SQ VM=1 Recommended Isodose Level Sequence</summary>
+        public readonly static DicomTag RecommendedIsodoseLevelSequence = new DicomTag(0x3004, 0x0016);
 
         ///<summary>(3004,0040) VR=DS VM=3 DVH Normalization Point</summary>
         public readonly static DicomTag DVHNormalizationPoint = new DicomTag(0x3004, 0x0040);
@@ -13630,6 +13648,9 @@ namespace FellowOakDicom
 
         ///<summary>(300A,02EB) VR=LT VM=1 Compensator Description</summary>
         public readonly static DicomTag CompensatorDescription = new DicomTag(0x300A, 0x02EB);
+
+        ///<summary>(300A,02EC) VR=CS VM=1 Compensator Surface Representation Flag</summary>
+        public readonly static DicomTag CompensatorSurfaceRepresentationFlag = new DicomTag(0x300A, 0x02EC);
 
         ///<summary>(300A,0302) VR=IS VM=1 Radiation Mass Number</summary>
         public readonly static DicomTag RadiationMassNumber = new DicomTag(0x300A, 0x0302);
